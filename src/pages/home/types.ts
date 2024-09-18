@@ -5,6 +5,7 @@ export interface ReduxState {
 
 export interface Charity {
   id: number;
-  name: string;
   currency: string;
+  image: string
+  name: string;
 }
