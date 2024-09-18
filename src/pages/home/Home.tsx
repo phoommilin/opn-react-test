@@ -48,6 +48,10 @@ export default function Home() {
         });
         if (response.ok) {
           fetchPayments();
+          dispatch({
+            type: 'UPDATE_MESSAGE',
+            message: `Thank you for donating ${amount} ${currency} to us, it means a lot to people who are less fortunate`,
+          });
         }
       } catch (e) {
         console.error(e);
