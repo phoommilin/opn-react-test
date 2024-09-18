@@ -1,12 +1,29 @@
-import React from 'react';
-import { CardProps } from './types';
+import React, { useState } from 'react';
 
-export default function Card({ children, name, onClick }: CardProps) {
+import { Button, CardWrapper, Content, Image } from './styles';
+import PaymentOverlay from '../paymentOverlay';
+import type { CardProps } from './types';
+
+const Card = ({ id, name, image, currency, onClick }: CardProps) => {
+  const [showOverlay, setShowOverlay] = useState(false);
   return (
-    <div>
-      <p>{name}</p>
-      {children}
-      <button onClick={onClick}>Pay</button>
-    </div>
+    <CardWrapper>
+      {image && <Image src={`/images/${image}`} alt={name} />}
+      <Content>
+        <h3>{name}</h3>
+        <Button onClick={() => setShowOverlay(true)}>Donate</Button>
+      </Content>
+
+      {showOverlay && (
+        <PaymentOverlay
+          charityId={id}
+          currency={currency}
+          onClose={() => setShowOverlay(false)}
+          handlePay={onClick}
+        />
+      )}
+    </CardWrapper>
   );
-}
+};
+
+export default Card;

@@ -1,5 +1,7 @@
 export interface CardProps {
-  children: React.ReactNode;
+  id: number;
   name: string;
-  onClick: () => void
+  currency: string;
+  image: string;
+  onClick: (id: number, currency: string, amount?: number) => void;
 }

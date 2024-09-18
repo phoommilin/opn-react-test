@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import fetch from 'isomorphic-fetch';
 import { useDispatch, useSelector } from 'react-redux';
+
+import Card from '../../components/card';
 import { summaryDonations } from '../../helpers';
-import type { Charity, ReduxState } from './types';
+
 import { Container, Content, Header } from './styles';
+import type { Charity, ReduxState } from './types';
 
 export default function Home() {
   const [charities, setCharities] = useState<Charity[]>([]);
@@ -37,14 +40,17 @@ export default function Home() {
 
   const handlePay = async (id: number, currency: string, amount?: number) => {
     if (amount) {
-      const response = await fetch('http://localhost:3001/payments', {
-        method: 'POST',
-        body: JSON.stringify({ charitiesId: id, amount, currency }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (response.ok) {
-        fetchPayments();
+      try {
+        const response = await fetch('http://localhost:3001/payments', {
+          method: 'POST',
+          body: JSON.stringify({ charitiesId: id, amount, currency }),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (response.ok) {
+          fetchPayments();
+        }
+      } catch (e) {
+        console.error(e);
       }
     }
   };
@@ -68,7 +74,14 @@ export default function Home() {
       </Header>
       <Content>
         {charities.map((item, i) => (
-          <div>{item.name}</div>
+          <Card
+            key={i}
+            id={item.id}
+            name={item.name}
+            currency={item.currency}
+            image={item.image}
+            onClick={handlePay}
+          />
         ))}
       </Content>
     </Container>
