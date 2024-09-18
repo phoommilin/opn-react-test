@@ -1,23 +1,20 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client'; // Updated import
+import ReactDOM from 'react-dom'; // Use 'react-dom' instead of 'react-dom/client'
 import { createStore, Store } from 'redux';
 import { Provider } from 'react-redux';
 import App from './App';
 
-// Define the shape of your state
 interface AppState {
   donate: number;
   message: string;
 }
 
-// Define the shape of actions
 interface Action {
   type: string;
   amount?: number;
   message?: string;
 }
 
-// Define a reducer function with types
 const reducer = (state: AppState | undefined, action: Action): AppState => {
   const _state = state || {
     donate: 0,
@@ -28,7 +25,7 @@ const reducer = (state: AppState | undefined, action: Action): AppState => {
     case 'UPDATE_TOTAL_DONATE':
       return {
         ..._state,
-        donate: _state.donate + (action.amount || 0),
+        donate: action.amount || 0,
       };
     case 'UPDATE_MESSAGE':
       return {
@@ -40,16 +37,15 @@ const reducer = (state: AppState | undefined, action: Action): AppState => {
   }
 };
 
-// Create the store with typed reducer
 const store: Store<AppState, Action> = createStore(reducer);
 
-// Create a root and render the app
+// Render the app using ReactDOM.render
 const rootElement = document.getElementById('root');
 if (rootElement) {
-  const root = createRoot(rootElement);
-  root.render(
+  ReactDOM.render(
     <Provider store={store}>
       <App />
-    </Provider>
+    </Provider>,
+    rootElement
   );
 }
