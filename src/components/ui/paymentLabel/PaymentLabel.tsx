@@ -1,6 +1,6 @@
 import { CheckedRadio, CustomRadio, RadioLabel, HiddenRadio } from './styles';
 
-import { PaymentLabelProps } from './types';
+import type { PaymentLabelProps } from './types';
 
 export default function PaymentLabel({
   id,

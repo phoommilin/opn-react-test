@@ -1,6 +1,26 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+`;
 
 export const OverlayWrapper = styled.div`
+  animation: ${fadeIn} 0.3s ease-in-out;
   position: absolute;
   top: 0;
   left: 0;
@@ -20,26 +40,10 @@ export const OverlayWrapper = styled.div`
   }
 `;
 
-export const RadioGroup = styled.div`
-  display: flex;
-  gap: 15px;
-  margin-bottom: 2rem;
-`;
-
-export const CloseButton = styled.button`
-  background: transparent;
-  border: none;
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 2.5rem;
-  cursor: pointer;
-`;
-
 export const PayButton = styled.button`
   background-color: #28a745;
   color: white;
-  padding: 10px 20px;
+  padding: 0.625rem 1.25rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -48,4 +52,10 @@ export const PayButton = styled.button`
   &:hover {
     background-color: #218838;
   }
+`;
+
+export const RadioGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
 `;

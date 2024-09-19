@@ -1,7 +1,7 @@
 export interface CardProps {
   id: number;
-  name: string;
   currency: string;
   image: string;
+  name: string;
   onClick: (id: number, currency: string, amount?: number) => void;
 }

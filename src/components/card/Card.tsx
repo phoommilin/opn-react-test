@@ -4,7 +4,13 @@ import { Button, CardWrapper, Content, Image } from './styles';
 import PaymentOverlay from '../paymentOverlay';
 import type { CardProps } from './types';
 
-const Card = ({ id, name, image, currency, onClick }: CardProps) => {
+export default function Card({
+  id,
+  currency,
+  image,
+  name,
+  onClick,
+}: CardProps) {
   const [showOverlay, setShowOverlay] = useState(false);
   return (
     <CardWrapper>
@@ -18,12 +24,10 @@ const Card = ({ id, name, image, currency, onClick }: CardProps) => {
         <PaymentOverlay
           charityId={id}
           currency={currency}
-          onClose={() => setShowOverlay(false)}
           handlePay={onClick}
+          onClose={() => setShowOverlay(false)}
         />
       )}
     </CardWrapper>
   );
-};
-
-export default Card;
+}

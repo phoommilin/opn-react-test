@@ -1,12 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import fetch from 'isomorphic-fetch';
 import { useDispatch, useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 
-import Card from '../../components/card';
+import { fetchCharities, fetchPayments, postPayment } from '../../api';
 import { summaryDonations } from '../../helpers';
+import {
+  removeMessage,
+  updateTotalDonate,
+  updateMessage,
+} from '../../redux/actions';
+import Card from '../../components/card';
 
-import { Container, Content, Header } from './styles';
+import { Container, Content, Header, Paragraph } from './styles';
 import type { Charity, ReduxState } from './types';
+import CountUp from 'react-countup';
 
 export default function Home() {
   const [charities, setCharities] = useState<Charity[]>([]);
@@ -14,67 +21,58 @@ export default function Home() {
   const donate = useSelector((state: ReduxState) => state.donate);
   const message = useSelector((state: ReduxState) => state.message);
 
-  useEffect(() => {
-    fetch('http://localhost:3001/charities')
-      .then((resp) => resp.json())
-      .then((data) => setCharities(data));
-  }, []);
-
-  const fetchPayments = useCallback(() => {
-    fetch('http://localhost:3001/payments')
-      .then((resp) => resp.json())
-      .then((data) => {
-        const totalDonations = summaryDonations(
-          data.map((item: { amount: number }) => item.amount)
-        );
-        dispatch({
-          type: 'UPDATE_TOTAL_DONATE',
-          amount: totalDonations,
-        });
-      });
+  const fetchAndUpdatePayments = useCallback(async () => {
+    try {
+      const data = await fetchPayments();
+      const totalDonations = summaryDonations(
+        data.map((item: { amount: number }) => item.amount)
+      );
+      dispatch(updateTotalDonate(totalDonations));
+    } catch (error) {
+      toast.error('Failed to update donations');
+    }
   }, [dispatch]);
 
-  useEffect(() => {
-    fetchPayments();
-  }, [fetchPayments]);
+  async function getCharities() {
+    try {
+      const data = await fetchCharities();
+      setCharities(data);
+    } catch (error) {
+      toast.error('Failed to load charities');
+    }
+  }
 
-  const handlePay = async (id: number, currency: string, amount?: number) => {
+  async function handlePay(id: number, currency: string, amount?: number) {
     if (amount) {
       try {
-        const response = await fetch('http://localhost:3001/payments', {
-          method: 'POST',
-          body: JSON.stringify({ charitiesId: id, amount, currency }),
-          headers: { 'Content-Type': 'application/json' },
+        await postPayment(id, amount, currency);
+        fetchAndUpdatePayments();
+        const thankYouMessage = `Thank you for donating ${amount} ${currency}`;
+        dispatch(updateMessage(thankYouMessage));
+        toast(thankYouMessage, {
+          icon: '👏',
         });
-        if (response.ok) {
-          fetchPayments();
-          dispatch({
-            type: 'UPDATE_MESSAGE',
-            message: `Thank you for donating ${amount} ${currency} to us, it means a lot to people who are less fortunate`,
-          });
-        }
-      } catch (e) {
-        console.error(e);
+        setTimeout(() => dispatch(removeMessage()), 4000);
+      } catch (error) {
+        toast.error('Payment failed. Please try again.');
       }
     }
-  };
+  }
+
+  useEffect(() => {
+    getCharities();
+  }, []);
+
+  useEffect(() => {
+    fetchAndUpdatePayments();
+  }, [fetchPayments]);
 
   return (
     <Container>
       <Header>
         <h1>Tamboon React</h1>
-        <p>All donations: {donate}</p>
-        <p
-          style={{
-            color: 'red',
-            margin: '1em 0',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            textAlign: 'center',
-          }}
-        >
-          {message}
-        </p>
+        <p>All donations: {donate && <CountUp end={donate} duration={2} />}</p>
+        <Paragraph className={message ? 'show' : ''}>{message}</Paragraph>
       </Header>
       <Content>
         {charities.map((item, i) => (
@@ -88,6 +86,7 @@ export default function Home() {
           />
         ))}
       </Content>
+      <Toaster />
     </Container>
   );
 }

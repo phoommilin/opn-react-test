@@ -1,18 +1,5 @@
 import styled from 'styled-components';
 
-export const RadioContainer = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 0.5rem;
-`;
-
-export const HiddenRadio = styled.input.attrs({ type: 'radio' })`
-  opacity: 0;
-  position: absolute;
-  cursor: pointer;
-`;
-
 export const CustomRadio = styled.div`
   width: 16px;
   height: 16px;
@@ -44,6 +31,19 @@ export const CheckedRadio = styled(CustomRadio)`
   &::after {
     opacity: 1;
   }
+`;
+
+export const HiddenRadio = styled.input.attrs({ type: 'radio' })`
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+`;
+
+export const RadioContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
 `;
 
 export const RadioLabel = styled.label`
