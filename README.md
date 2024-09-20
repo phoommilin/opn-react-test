@@ -25,9 +25,11 @@ This template comes with a comprehensive setup out of the box, including:
 - **[Styled Components][1]**: Embrace the power of CSS-in-JS with styled-components for scalable and maintainable styling.
 - **[Redux for State Management][2]**: Learn how to manage complex state with Redux, including dynamic updates and middleware handling.
 - **[Jest Testing][3]**: A testing framework setup with Jest to ensure your application functions as expected.
+- **[React Hot Toast][4]**: Enjoy seamless and customizable toast notifications with `react-hot-toast`, enhancing user feedback with minimal effort.
 - **Mock API Integration**: Simulate backend interactions with a local JSON server, perfect for frontend development and testing.
 
 [1]: https://styled-components.com/docs/api
 [2]: https://react-redux.js.org/
 [3]: https://jestjs.io/
+[4]: https://react-hot-toast.com/
 
