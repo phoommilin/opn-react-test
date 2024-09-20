@@ -42,7 +42,7 @@ export const OverlayWrapper = styled.div`
 
 export const PayButton = styled.button`
   background-color: #28a745;
-  color: white;
+  color: #fff;
   padding: 0.625rem 1.25rem;
   border: none;
   border-radius: 4px;
